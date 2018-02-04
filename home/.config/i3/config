@@ -15,6 +15,7 @@
 # Xresources      var      value       fallback
 set_from_resource $bg      background  #19043C
 set_from_resource $fg      foreground  #F1F1F1
+set_from_resource $black   color0      #19043C
 set_from_resource $red     color1      #EE79A9
 set_from_resource $green   color2      #8C9440
 set_from_resource $yellow  color3      #DE935F
@@ -22,10 +23,8 @@ set_from_resource $blue    color4      #05C6F1
 set_from_resource $purple  color5      #85678F
 set_from_resource $cyan    color6      #5E8D87
 set_from_resource $grey    color7      #969CD3
-set_from_resource $white   color15     #F1F1F1
-set_from_resource $black   color0      #19043C
 
-# class                 bd    bg  txt    ind   child_bordr
+# class                 bd    bg  txt    ind   child_bd
 client.focused          $grey $bg $fg    $blue $grey
 client.unfocused        $grey $bg $black $bg   $bg
 client.focused_inactive $grey $bg $black $bg   $bg

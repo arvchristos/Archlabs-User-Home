@@ -6,41 +6,31 @@
 # Written by Nathaniel Maia <natemaia10@gmail.com>
 #
 
-yes="y"
-no="n"
-REPO='
+REPOS='
 [archlabs_repo]
 Server = https://archlabs.github.io/archlabs_repo/$arch
 Server = https://downloads.sourceforge.net/project/archlabs-repo/archlabs_repo/$arch'
 
-HFILES=("$HOME/bin" "$HOME/.config" "$HOME/.themes" "$HOME/.gtkrc-2.0"
-        "$HOME/.gorice" "$HOME/.Xresources" "$HOME/.Xresources.template"
-        "$HOME/.mozilla" "$HOME/.zshrc" "$HOME/.bashrc" "$HOME/.icons"
-        "$HOME/.local" "$HOME/.xprofile" "$HOME/.xserverrc" "$HOME/.xinitrc")
+HOME_FILES=("$HOME/bin"      "$HOME/.config"     "$HOME/.themes"
+            "$HOME/.gorice"  "$HOME/.Xresources" "$HOME/.Xresources.template"
+            "$HOME/.mozilla" "$HOME/.zshrc"      "$HOME/.bashrc"
+            "$HOME/.local"   "$HOME/.xprofile"   "$HOME/.xinitrc"
+            "$HOME/.icons"   "$HOME/.gtkrc-2.0"
+            )
 
-CFILES=("$HOME/.config/awesome" "$HOME/.config/jgmenu" "$HOME/.config/bspwm"
-        "$HOME/.config/dunst" "$HOME/.config/i3" "$HOME/.config/obmenu-generator"
-        "$HOME/.config/qt5ct" "$HOME/.config/Thunar" "$HOME/.config/conky"
-        "$HOME/.config/geany" "$HOME/.config/neofetch" "$HOME/.config/polybar"
-        "$HOME/.config/termite" "$HOME/.config/xfce4" "$HOME/.config/openbox"
-        "$HOME/.config/ob-autostart")
+SKEL_FILES=('/etc/skel/bin'         '/etc/skel/.config'   '/etc/skel/.themes'
+            '/etc/skel/.Xresources' '/etc/skel/.gorice'   '/etc/skel/.icons'
+            '/etc/skel/.gtkrc-2.0'  '/etc/skel/.xprofile' '/etc/skel/.xinitrc'
+            '/etc/skel/.mozilla'    '/etc/skel/.Xresources.template'
+            )
 
-SFILES=('/etc/skel/bin' '/etc/skel/.config' '/etc/skel/.themes' '/etc/skel/.gorice'
-        '/etc/skel/.Xresources' '/etc/skel/.Xresources.template' '/etc/skel/.mozilla'
-        '/etc/skel/.zshrc' '/etc/skel/.bashrc' '/etc/skel/.icons' '/etc/skel/.local'
-        '/etc/skel/.xprofile' '/etc/skel/.xserverrc' '/etc/skel/.xinitrc' '/etc/skel/.gtkrc-2.0')
-
-KEYS=('AEFB411B072836CD48FF0381AE252C284B5DBA5D'
-      '9E4F11C6A072942A7B3FD3B0B81EB14A09A25EB0'
-      '35F52A02854DCCAEC9DD5CC410443C7F54B00041')
-
-WMS=(bspwm i3 openbox)
-for i in ${WMS[@]}; do
+WMS=(i3 openbox)
+for i in "${WMS[@]}"; do
     if [[ "$(wmctrl -m | grep -i name | awk '{print tolower($2)}')" == "$i" ]]; then
         WM=$i && break
     elif [[ "$(xprop -root -notype | grep "WM_NAME =" | tr -d '"' | awk '{print tolower($3)}')" == "$i" ]]; then
         WM=$i && break
-    elif [[ "$(awk '{print tolower($0)}' <<< $XDG_CURRENT_DESKTOP)" == "$i" ]]; then
+    elif [[ "$(awk '{print tolower($0)}' <<< "$XDG_CURRENT_DESKTOP")" == "$i" ]]; then
         WM=$i && break
     fi
 done
@@ -51,76 +41,74 @@ while ! [[ $(ping -c1 8.8.8.8) ]]; do
     clear; sleep 1
 done
 
-setupKeyring() {
+setup_keyring() {
+    KEYS=('AEFB411B072836CD48FF0381AE252C284B5DBA5D'
+          '9E4F11C6A072942A7B3FD3B0B81EB14A09A25EB0'
+          '35F52A02854DCCAEC9DD5CC410443C7F54B00041'
+          )
     sudo dirmngr </dev/null
     sudo pacman-key --init
     sudo pacman-key --populate archlinux
-    for key in ${KEYS[@]}; do
-        if ! sudo pacman-key --list-keys | grep $key > /dev/null 2>&1; then
-            gpg --receive-keys $key
-            sudo pacman-key -r $key
+    for key in "${KEYS[@]}"; do
+        if ! grep -q "$key" <<< "$(sudo pacman-key --list-keys)"; then
+            gpg --receive-keys "$key"
+            sudo pacman-key -r "$key"
         fi
     done
     sudo pacman -S archlabs-keyring --needed --noconfirm
     sudo pacman-key --populate archlabs
 
-    if grep "archlabs_repo" /etc/pacman.conf > /dev/null 2>&1; then
+    if grep -q "archlabs_repo" /etc/pacman.conf; then
         sudo sed -i '/archlabs_repo/d' /etc/pacman.conf
     fi
-    echo $REPO | sudo tee -a /etc/pacman.conf > /dev/null 2>&1
+    echo "$REPOS" | sudo tee -a /etc/pacman.conf >/dev/null 2>&1
 }
 
-backupConfigs() {
-    if ! [ -e "$HOME/Downloads/$USER-backup.tar.gz" ]; then
-        tar czvf $HOME/Downloads/$USER-backup.tar.gz ${HFILES[@]} > /dev/null 2>&1
+backup_configs() {
+    if ! [[ -e "$HOME/Downloads/$USER-backup.tar.gz" ]]; then
+        tar czvf "$HOME/Downloads/$USER-backup.tar.gz" "${HOME_FILES[@]}" >/dev/null 2>&1
     else
         echo "[WARNING]  Backup already exists... Not overwriting"
         sleep 2
     fi
 }
 
-setupConfigs() {
+setup_configs() {
     sudo pacman -S clutter-gtk libgee archlabs-jgmenu --needed --noconfirm
     sudo pacman -S gdk-pixbuf2 pango python-yaml --needed --noconfirm
-    rm -rf ${CFILES[@]}
-    cp -rf ${SFILES[@]} /etc/skel/.zshrc /etc/skel/.bashrc $HOME/
+    cp -rf "${SKEL_FILES[@]}" "$HOME/"
+    cp -f /etc/skel/.{bashrc,zshrc} "$HOME/"
+}
+
+new_configs() {
+    clear
+    printf "\nThis step will get the latest configs for polybar, openbox, i3 etc.
+    \n\nYour existing configs will be archived to:
+    \n\t$HOME/Downloads/$USER-backup.tar.gz\n\n\n\nDo you want to continue?  [y/N]:"
+    read -r answer
+
+    case "$answer" in
+        y|yes|Y|YES)
+            backup_configs
+            if [[ -e $HOME/Downloads/$USER-backup.tar.gz ]]; then
+                setup_configs
+            fi
+            rm -f "$HOME/.config/keypack"
+            sed -i '/keypack/d' "$HOME/.config/openbox/autostart"
+            ~/.config/setup
+    esac
 }
 
 
-# first setup Keyring
 setupKeyring
-
-# make sure skel package is installed and updated
 if ! pacman -Q archlabs-user-skel >/dev/null 2>&1; then
-    sudo rm -rf ${SFILES[@]}
+    sudo rm -rf "${SKEL_FILES[@]}"
     sudo pacman -S archlabs-user-skel --needed --noconfirm
 else
     sudo pacman -Syyu --noconfirm
 fi
 
-
-clear
-printf "\nThis step will get the latest configs for polybar, openbox, i3 etc.
-\n\nYour existing configs will be archived to:
-\n\t$HOME/Downloads/$USER-backup.tar.gz\n\n\n\nDo you want to continue?  [y/N]:"
-read -r answer
-
-if [ "${answer,,}" = "${yes,,}" ]; then
-    backupConfigs
-    if [ -e "$HOME/Downloads/$USER-backup.tar.gz" ]; then
-        setupConfigs
-    fi
-
-    rm -f $HOME/.config/keypack
-    sed -i '/keypack/d' $HOME/.config/openbox/autostart
-    $HOME/.config/setup
-
-    if [[ "$WM" == "i3" ]]; then
-        i3-msg restart
-    elif [[ "$WM" == "openbox" ]]; then
-        al-polybar-session -r
-    fi
-fi
+new_configs
 
 clear
 echo "##########################################################

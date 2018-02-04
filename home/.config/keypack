@@ -7,14 +7,15 @@
 do_setup() {
     keys=('AEFB411B072836CD48FF0381AE252C284B5DBA5D'
           '9E4F11C6A072942A7B3FD3B0B81EB14A09A25EB0'
-          '35F52A02854DCCAEC9DD5CC410443C7F54B00041')
+          '35F52A02854DCCAEC9DD5CC410443C7F54B00041'
+          )
     sudo dirmngr </dev/null
     sudo pacman-key --init
     sudo pacman-key --populate archlinux
-    for k in ${keys[@]}; do
-        if ! sudo pacman-key --list-keys | grep -q $k; then
-            gpg --receive-keys $k
-            sudo pacman-key -r $k
+    for k in "${keys[@]}"; do
+        if ! grep -q "$k" <<< "$(sudo pacman-key --list-keys)"; then
+            gpg --receive-keys "$k"
+            sudo pacman-key -r "$k"
         fi
     done
     sudo pacman-key --populate archlabs
@@ -25,5 +26,5 @@ while ! [[ "$(ping -c1 8.8.8.8)" ]]; do
 done
 
 do_setup
-sed -i '/keypack/d' $HOME/.config/openbox/autostart
-rm -f $HOME/.config/keypack
+sed -i '/keypack/d' "$HOME/.config/openbox/autostart"
+rm -f "$HOME/.config/keypack"

@@ -49,7 +49,7 @@ xterm*loginShell: true
 xterm*vt100*geometry: 90x34
 xterm*saveLines: 2000
 xterm*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48
-xterm*termName: xterm-color
+xterm*termName: xterm-256color
 xterm*eightBitInput: false
 
 

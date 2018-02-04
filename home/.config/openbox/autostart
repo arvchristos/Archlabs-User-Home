@@ -1,9 +1,9 @@
-# launch compton if enabled
+# compton
 al-compositor --start &
 
 #$HOME/.config/setup &
 # enable numlock, commented out for laptop users
-#numlockx on &
+# numlockx &
 
 # restore wallpaper
 nitrogen --restore &
