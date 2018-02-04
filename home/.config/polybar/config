@@ -44,7 +44,7 @@ inherit = bar/master
 ; Use $ xrandr -q | grep " connected" | cut -d ' ' -f1
 monitor =
 
-modules-left   = config i3 menu
+modules-left   = jgmenu config i3 menu
 modules-center = clock
 modules-right  = pkg memory temperature coreuse network volume
 

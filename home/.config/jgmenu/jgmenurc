@@ -1,9 +1,10 @@
 # jgmenurc
 
 at_pointer      = 0
-stay_alive      = 0
+stay_alive      = 1
 multi_window    = 1
 tint2_look      = 1
+csv_cmd         = lx
 
 menu_halign     = left
 menu_valign     = top
