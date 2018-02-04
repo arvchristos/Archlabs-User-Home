@@ -18,51 +18,17 @@ HOME_FILES=("$HOME/bin"      "$HOME/.config"     "$HOME/.themes"
             "$HOME/.icons"   "$HOME/.gtkrc-2.0"
             )
 
-SKEL_FILES=('/etc/skel/bin'         '/etc/skel/.config'   '/etc/skel/.themes'
-            '/etc/skel/.Xresources' '/etc/skel/.gorice'   '/etc/skel/.icons'
-            '/etc/skel/.gtkrc-2.0'  '/etc/skel/.xprofile' '/etc/skel/.xinitrc'
-            '/etc/skel/.mozilla'    '/etc/skel/.Xresources.template'
+SKEL_FILES=(/etc/skel/bin         /etc/skel/.config   /etc/skel/.themes
+            /etc/skel/.Xresources /etc/skel/.gorice   /etc/skel/.icons
+            /etc/skel/.gtkrc-2.0  /etc/skel/.xprofile /etc/skel/.xinitrc
+            /etc/skel/.mozilla    /etc/skel/.Xresources.template
             )
-
-WMS=(i3 openbox)
-for i in "${WMS[@]}"; do
-    if [[ "$(wmctrl -m | grep -i name | awk '{print tolower($2)}')" == "$i" ]]; then
-        WM=$i && break
-    elif [[ "$(xprop -root -notype | grep "WM_NAME =" | tr -d '"' | awk '{print tolower($3)}')" == "$i" ]]; then
-        WM=$i && break
-    elif [[ "$(awk '{print tolower($0)}' <<< "$XDG_CURRENT_DESKTOP")" == "$i" ]]; then
-        WM=$i && break
-    fi
-done
 
 # Loop until network connected
 while ! [[ $(ping -c1 8.8.8.8) ]]; do
     echo -e "Please Connect to a Network Before Continuing"
     clear; sleep 1
 done
-
-setup_keyring() {
-    KEYS=('AEFB411B072836CD48FF0381AE252C284B5DBA5D'
-          '9E4F11C6A072942A7B3FD3B0B81EB14A09A25EB0'
-          '35F52A02854DCCAEC9DD5CC410443C7F54B00041'
-          )
-    sudo dirmngr </dev/null
-    sudo pacman-key --init
-    sudo pacman-key --populate archlinux
-    for key in "${KEYS[@]}"; do
-        if ! grep -q "$key" <<< "$(sudo pacman-key --list-keys)"; then
-            gpg --receive-keys "$key"
-            sudo pacman-key -r "$key"
-        fi
-    done
-    sudo pacman -S archlabs-keyring --needed --noconfirm
-    sudo pacman-key --populate archlabs
-
-    if grep -q "archlabs_repo" /etc/pacman.conf; then
-        sudo sed -i '/archlabs_repo/d' /etc/pacman.conf
-    fi
-    echo "$REPOS" | sudo tee -a /etc/pacman.conf >/dev/null 2>&1
-}
 
 backup_configs() {
     if ! [[ -e "$HOME/Downloads/$USER-backup.tar.gz" ]]; then
@@ -76,7 +42,9 @@ backup_configs() {
 setup_configs() {
     sudo pacman -S clutter-gtk libgee archlabs-jgmenu --needed --noconfirm
     sudo pacman -S gdk-pixbuf2 pango python-yaml --needed --noconfirm
-    cp -rf "${SKEL_FILES[@]}" "$HOME/"
+    for f in "${SKEL_FILES[@]}"; do
+        cp -rf "$f" ~/
+    done
     cp -f /etc/skel/.{bashrc,zshrc} "$HOME/"
 }
 
@@ -99,10 +67,10 @@ new_configs() {
     esac
 }
 
-
-setupKeyring
 if ! pacman -Q archlabs-user-skel >/dev/null 2>&1; then
-    sudo rm -rf "${SKEL_FILES[@]}"
+    for f in "${SKEL_FILES[@]}"; do
+        sudo rm -rf "$f"
+    done
     sudo pacman -S archlabs-user-skel --needed --noconfirm
 else
     sudo pacman -Syyu --noconfirm
