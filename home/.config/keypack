@@ -16,6 +16,7 @@ do_setup() {
         if ! grep -q "$k" <<< "$(sudo pacman-key --list-keys)"; then
             gpg --receive-keys "$k"
             sudo pacman-key -r "$k"
+            sudo pacman-key --lsign "$k"
         fi
     done
     sudo pacman-key --populate archlabs
