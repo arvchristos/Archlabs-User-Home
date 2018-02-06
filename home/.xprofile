@@ -5,22 +5,16 @@
 XDG_CONFIG_HOME=$HOME/.config
 export XDG_CONFIG_HOME
 
-# include ~/bin in path
 if [ -d "$HOME/bin" ]; then
     PATH=$HOME/bin:$PATH
 fi
-
-# include sbin in PATH
 if [ -d "/sbin" ]; then
     PATH="/sbin:$PATH"
 fi
-
-# include sbin in PATH
 if [ -d "/usr/sbin" ]; then
     PATH="/usr/sbin:$PATH"
 fi
 
-# launch dbus
 if which dbus-launch >/dev/null && test -z "$DBUS_SESSION_BUS_ADDRESS"; then
     eval $(dbus-launch --sh-syntax --exit-with-session)
 fi
