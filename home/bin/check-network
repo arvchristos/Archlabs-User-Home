@@ -4,7 +4,7 @@ connected=""
 disconnected=""
 
 while true; do
-    if [[ $(ping -c1 8.8.8.8) ]]; then
+    if ping -c1 8.8.8.8 &>/dev/null; then
         echo "$connected"; sleep 10
     else
         echo "$disconnected"; sleep 1
