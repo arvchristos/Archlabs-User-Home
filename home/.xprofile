@@ -8,9 +8,11 @@ export XDG_CONFIG_HOME
 if [ -d "$HOME/bin" ]; then
     PATH=$HOME/bin:$PATH
 fi
+
 if [ -d "/sbin" ]; then
     PATH="/sbin:$PATH"
 fi
+
 if [ -d "/usr/sbin" ]; then
     PATH="/usr/sbin:$PATH"
 fi

@@ -42,10 +42,6 @@ gaps outer 5
 # font
 font pango:Roboto 11
 
-
-#### Set
-##
-
 # $Mod = Super or Alt?
 set $Mod Mod4
 #set $Mod Mod1
@@ -69,33 +65,33 @@ set $WS8 "8: "
 set $Mon1 HDMI1
 set $Mon2 HDMI2
 
-####################################################################################################
-#################                            Autostart                            ##################
-####################################################################################################
+#####################################################
+###############     Autostart      ##################
+#####################################################
 
 # run with reload
-exec_always --no-startup-id start-compton
 exec_always --no-startup-id al-polybar-session
 exec_always --no-startup-id nitrogen --restore
 exec_always --no-startup-id xrdb -load ~/.Xresources
 
 # Trayer
 exec_always --no-startup-id pkill trayer; trayer --edge bottom \
-            --align left --heighttype pixel --height 18 --widthtype request \
-            --SetDockType false --expand true --transparent true --alpha 255
+                --align left --heighttype pixel --height 18 --widthtype request \
+                --SetDockType false --expand true --transparent true --alpha 255
 
 # If you have a numpad you may want to enable this
 # exec_always --no-startup-id numlockx on
 
 # run once
-exec --no-startup-id xfsettingsd
 exec --no-startup-id ksuperkey -e 'Super_L=Alt_L|F1'
+exec --no-startup-id al-compositor --start
 exec --no-startup-id nitrogen --restore
+exec --no-startup-id xfsettingsd
 exec --no-startup-id lxpolkit
 
-####################################################################################################
-#################                          Bindings                               ##################
-####################################################################################################
+###########################################################
+#############         Bindings           ##################
+###########################################################
 
 # kill focused window
 bindsym $Mod+Shift+q kill
@@ -113,13 +109,13 @@ bindsym $Mod+t exec exo-open --launch TerminalEmulator
 bindsym $Mod+w exec exo-open --launch WebBrowser
 bindsym $Mod+f exec exo-open --launch FileManager
 
-# logout
+# logout script
 bindsym $Mod+x exec --no-startup-id rofr.sh -l
 
-# long command broken into multiple lines
+# Screenshot
 bindsym Print exec --no-startup-id "scrot '%S.png' \
--e 'mv $f $$(xdg-user-dir PICTURES)/ArchLabs-%S-$wx$h.png \
-; gpicview $$(xdg-user-dir PICTURES)/ArchLabs-%S-$wx$h.png'"
+            -e 'mv $f $$(xdg-user-dir PICTURES)/ArchLabs-%S-$wx$h.png \
+            ; gpicview $$(xdg-user-dir PICTURES)/ArchLabs-%S-$wx$h.png'"
 
 # audio
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
@@ -129,12 +125,14 @@ bindsym XF86AudioStop exec --no-startup-id playerctl stop
 bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer -i 2
 bindsym XF86AudioLowerVolume exec --no-startup-id pamixer -d 2
 bindsym XF86AudioMute exec --no-startup-id pamixer -t
+
+# backlight
 bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10
 bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 10
 
-####################################################################################################
-#################                        Workspace Bindings                        #################
-####################################################################################################
+################################################################
+###########          Workspace Bindings          ###############
+################################################################
 
 # workspace assignment
 workspace $WS1 output $Mon1
@@ -166,9 +164,9 @@ bindsym $Mod+Shift+6 move container to workspace $WS6; workspace $WS6
 bindsym $Mod+Shift+7 move container to workspace $WS7; workspace $WS7
 bindsym $Mod+Shift+8 move container to workspace $WS8; workspace $WS8
 
-####################################################################################################
-#################                          Reload configs                          #################
-####################################################################################################
+############################################################
+##############     Reload configs           ################
+############################################################
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $Mod+Shift+r restart
@@ -176,9 +174,9 @@ bindsym $Mod+Shift+r restart
 # reload the configuration file
 bindsym $Mod+Shift+c reload
 
-####################################################################################################
-################                       Container/Window control                   ##################
-####################################################################################################
+########################################################
+############      Container/Window control  ############
+########################################################
 
 # Scratchpad, Floating
 bindsym $Mod+Shift+space floating toggle
@@ -233,9 +231,9 @@ bindsym $Mod+Shift+s layout stacking
 bindsym $Mod+Shift+h layout toggle split
 default_orientation horizontal
 
-####################################################################################################
-#################                            Border & Gaps                         #################
-####################################################################################################
+######################################################
+###############      Border & Gaps     ###############
+######################################################
 
 new_window normal
 new_float normal
@@ -243,25 +241,24 @@ hide_edge_borders both
 popup_during_fullscreen smart
 bindsym $Mod+shift+b border toggle
 
-#changing border style
+# changing border style
 bindsym $Mod+n border normal
 bindsym $Mod+y border 1pixel
 bindsym $Mod+u border none
 
 # change gaps
-bindsym $Mod+plus                gaps inner current plus  5
-bindsym $Mod+minus               gaps inner current minus 5
-bindsym $Mod+Shift+plus          gaps outer current plus  5
-bindsym $Mod+Shift+minus         gaps outer current minus 5
+bindsym $Mod+plus        gaps inner current plus  5
+bindsym $Mod+minus       gaps inner current minus 5
+bindsym $Mod+Shift+plus  gaps outer current plus  5
+bindsym $Mod+Shift+minus gaps outer current minus 5
 bindsym $Mod+Control+plus        gaps inner all plus  5
 bindsym $Mod+Control+minus       gaps inner all minus 5
 bindsym $Mod+Control+Shift+plus  gaps outer all plus  5
 bindsym $Mod+Control+Shift+minus gaps outer all minus 5
 
-
-####################################################################################################
-#################                        application settings                      #################
-####################################################################################################
+###################################################
+############    application settings   ############
+###################################################
 
 for_window [class="(?i)(?:qt5ct|pinentry)"] floating enable, focus
 for_window [class="(?i)(?:termite|thunar)"] focus
@@ -279,4 +276,3 @@ for_window [window_role="(?i)(?:pop-up|setup)"] floating enable
 
 # set trayer to be borderless
 for_window [class="(?i)trayer"] border pixel 0
-
