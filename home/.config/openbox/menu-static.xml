@@ -185,12 +185,6 @@
         <menu execute="al-help-pipemenu" id="help" label="Help and Info"/>
         <menu execute="al-kb-pipemenu" id="keybinds" label="Keybinds"/>
         <separator/>
-        <item label="Install Archlabs">
-            <action name="Execute">
-                <command>install-al</command>
-            </action>
-        </item>
-        <separator/>
         <item label="Lock Screen">
             <action name="Execute">
                 <command>i3lock-fancy -p</command>

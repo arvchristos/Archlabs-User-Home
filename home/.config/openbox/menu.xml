@@ -47,22 +47,22 @@
         <separator/>
         <menu id="preferences" label="Preferences">
             <menu id="obConfig" label="Openbox">
-                <item label="Settings Editor">
+                <item label="Openbox Settings">
                     <action name="Execute">
                         <command>obconf</command>
                     </action>
                 </item>
-                <item label="Menu Editor">
+                <item label="Menu GUI">
                     <action name="Execute">
                         <command>kickshaw</command>
                     </action>
                 </item>
-                <item label="Keybind Editor">
+                <item label="Keybind GUI">
                     <action name="Execute">
                         <command>obkey</command>
                     </action>
                 </item>
-                <item label="Autostart Editor">
+                <item label="Autostart GUI">
                     <action name="Execute">
                         <command>ob-autostart</command>
                     </action>
@@ -95,8 +95,8 @@
             <menu execute="al-polybar-pipemenu" id="PolybarPipeMenu" label="Polybar"/>
             <menu execute="al-conky-pipemenu" id="ConkyPipeMenu" label="Conky"/>
             <menu execute="al-tint2-pipemenu" id="TintPipeMenu" label="Tint2"/>
+            <menu execute="al-settings-pipemenu" id="SettingsPipeMenu" label="Settings"/>
         </menu>
-        <menu execute="al-settings-pipemenu" id="SettingsPipeMenu" label="Settings"/>
         <menu execute="al-help-pipemenu" id="help" label="Help and Info"/>
         <menu execute="al-kb-pipemenu" id="keybinds" label="Keybinds"/>
         <separator/>
