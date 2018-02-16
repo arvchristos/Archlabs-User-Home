@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
-connected=""
-disconnected=""
+wireless_connected=""
+disconnected="/"
+ethernet_connected=""
 
 while true; do
     if ping -c1 8.8.8.8 &>/dev/null; then
-        echo "$connected"; sleep 10
+        if [[ $(ip link | awk '/state UP/ {getline;print $1}') = link/ether ]]; then
+          echo "$ethernet_connected"; sleep 10
+        else
+          echo "$wireless_connected"; sleep 10
+        fi
     else
         echo "$disconnected"; sleep 1
-        echo "$connected"; sleep 1
     fi
 done
