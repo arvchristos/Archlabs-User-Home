@@ -42,21 +42,10 @@ xset s 3600 3600
 
 # start the session
 case $session in
-    i3|i3wm)
-        exec i3
-        ;;
-    bsp|bspwm)
-        exec bspwm
-        ;;
-    awesome)
-        exec awesome
-        ;;
-    xfce|xfce4)
-        exec startxfce4
-        ;;
-    openbox|openbox-session)
-        exec openbox-session
-        ;;
-    *)
-        exec "$1"
+    i3|i3wm) exec i3 ;;
+    bsp|bspwm) exec bspwm ;;
+    awesome) exec awesome ;;
+    xfce|xfce4) exec startxfce4 ;;
+    openbox|openbox-session) exec openbox-session ;;
+    *) exec "$1"
 esac

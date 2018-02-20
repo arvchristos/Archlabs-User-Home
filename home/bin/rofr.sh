@@ -1,22 +1,21 @@
 #!/usr/bin/env bash
 
-
 Name=$(basename "$0")
 Version="0.1"
+
 _usage() {
     cat <<- EOF
+Usage:   $Name [options]
 
-    Usage:   $Name [options]
-
-    Options:
-             -h      Display this message
-             -v      Display script version
-             -q      Persistant calculator dialog
-             -w      Switch between open windows
-             -r      Program launcher & run dialog
-             -c      Select previous clipboard entries
-             -b      Browser search by keyword
-             -l      Session logout choice
+Options:
+     -h      Display this message
+     -v      Display script version
+     -q      Persistant calculator dialog
+     -w      Switch between open windows
+     -r      Program launcher & run dialog
+     -c      Select previous clipboard entries
+     -b      Browser search by keyword
+     -l      Session logout choice
 
 EOF
 }

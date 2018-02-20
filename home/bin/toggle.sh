@@ -9,7 +9,6 @@ _usage() {
         $Name [OPTIONS] [ADDITIONAL]
 
  OPTIONS:
-
       -h,--help         Display this message
       -v,--version      Display script version
       -t,--terminal     Toggle a floating work terminal, no additional options
@@ -19,7 +18,6 @@ _usage() {
       -f,--caffeine     Toggle caffeine or daemon monitoring icon, can use toggle option
 
  ADDITIONAL:
-
       -tg,--toggle      Toggle the program off/on, without this flag a monitor process will be started
 
 EOF

@@ -1,16 +1,4 @@
-#########################################
-###         KEY DEFINITIONS          ####
-#########################################
-##     $Mod = Super key or Mod4        ##
-##         Mod1 = ALT key              ##
-##       Control = CTRL key            ##
-##        Shift = SHIFT key            ##
-##       Escape = ESCAPE key           ##
-##    Return = ENTER or RETURN key     ##
-##        Pause = PAUSE key            ##
-##        Print = PRINT key            ##
-##          Tab = TAB key              ##
-#########################################
+# ArchLabs i3 config
 
 # Xresources      var      value       fallback
 set_from_resource $bg      background  #19043C
