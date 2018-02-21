@@ -28,7 +28,7 @@ gaps inner 15
 gaps outer 5
 
 # font
-font pango:Roboto 11
+font pango:DejaVu Sans Mono 10
 
 # $Mod = Super or Alt?
 set $Mod Mod4

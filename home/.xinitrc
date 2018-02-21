@@ -1,6 +1,4 @@
 #!/bin/sh
-#
-# ~/.xinitrc
 # Executed by startx
 # By calling this with arguments we can start different sessions
 # eg. startx ~/.xinitrc i3  or  startx ~/.xinitrc bspwm
@@ -8,9 +6,6 @@
 
 session=${1:-openbox}
 export WM="$session"
-export XDG_CONFIG_HOME="$HOME/.config"
-export PATH=/home/smoke/bin:/usr/sbin:$PATH
-
 
 if [ -f /etc/X11/xinit/.Xmodmap ]; then
     xmodmap /etc/X11/xinit/.Xmodmap
@@ -42,9 +37,9 @@ xset s 3600 3600
 
 # start the session
 case $session in
-    i3|i3wm) exec i3 ;;
-    bsp|bspwm) exec bspwm ;;
-    awesome) exec awesome ;;
+    i3|i3wm)    exec i3 ;;
+    bsp|bspwm)  exec bspwm ;;
+    awesome)    exec awesome ;;
     xfce|xfce4) exec startxfce4 ;;
     openbox|openbox-session) exec openbox-session ;;
     *) exec "$1"
