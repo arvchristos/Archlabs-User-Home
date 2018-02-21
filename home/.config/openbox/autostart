@@ -23,7 +23,7 @@ lxpolkit &
 # Required for xfce settings to work
 xfsettingsd &
 
-# set user shortcuts for file managers
+# Side shortcuts for file managers
 xdg-user-dirs-gtk-update &
 
 $HOME/.config/keypack &

@@ -2,15 +2,15 @@
 <openbox_menu xmlns="http://openbox.org/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://openbox.org/  file:///usr/share/openbox/menu.xsd">
   <menu id="root-menu" label="Openbox 3">
     <separator label="ArchLabs"/>
-    <menu execute="al-terminalemulators-pipemenu" id="TerminalPipeMenu" label="Terminal"/>
-    <menu execute="al-filemanagers-pipemenu" id="FileManagerPipeMenu" label="File Manager"/>
+    <menu execute="al-terminal-pipemenu" id="TerminalPipeMenu" label="Terminal"/>
+    <menu execute="al-files-pipemenu" id="FilePipeMenu" label="File Manager"/>
     <menu execute="al-browsers-pipemenu" id="BrowserPipeMenu" label="Web Browser"/>
     <menu execute="al-editors-pipemenu" id="EditorPipeMenu" label="Text Editor"/>
     <separator/>
     <menu execute="al-office-pipemenu" id="OfficePipeMenu" label="Office"/>
     <menu execute="al-media-pipemenu" id="MediaPipeMenu" label="Multimedia"/>
     <menu execute="al-graphics-pipemenu" id="GraphicPipeMenu" label="Graphics"/>
-    <menu id="WebandMail" label="Web & Mail">
+    <menu id="AccessoriesMenu" label="Accessories">
       <menu execute="al-mail-pipemenu" id="MailPipeMenu" label="Mail"/>
       <menu execute="al-messaging-pipemenu" id="MessagingPipeMenu" label="Messaging"/>
       <menu execute="al-filesharing-pipemenu" id="FilesharingPipeMenu" label="File Sharing"/>
@@ -83,7 +83,7 @@
           <action name="Reconfigure"/>
         </item>
         <item label="Openbox Restart">
-          <action name="Restart"/>
+            <action name="Restart"/>
         </item>
       </menu>
       <menu execute="al-compositor" id="CompositingPipeMenu" label="Compositor"/>
@@ -108,3 +108,5 @@
     </item>
   </menu>
 </openbox_menu>
+<!-- vim:sw=2
+-->
