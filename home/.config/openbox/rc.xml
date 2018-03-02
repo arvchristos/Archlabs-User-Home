@@ -119,11 +119,6 @@
         <to>4</to>
       </action>
     </keybind>
-    <keybind key="W-5">
-      <action name="GoToDesktop">
-        <to>5</to>
-      </action>
-    </keybind>
     <keybind key="S-W-1">
       <action name="SendToDesktop">
         <desktop>1</desktop>
@@ -131,22 +126,17 @@
     </keybind>
     <keybind key="S-W-2">
       <action name="SendToDesktop">
-        <desktop>1</desktop>
+        <desktop>2</desktop>
       </action>
     </keybind>
     <keybind key="S-W-3">
       <action name="SendToDesktop">
-        <desktop>1</desktop>
+        <desktop>3</desktop>
       </action>
     </keybind>
     <keybind key="S-W-4">
       <action name="SendToDesktop">
-        <desktop>1</desktop>
-      </action>
-    </keybind>
-    <keybind key="S-W-5">
-      <action name="SendToDesktop">
-        <desktop>1</desktop>
+        <desktop>4</desktop>
       </action>
     </keybind>
     <keybind key="A-Tab">
