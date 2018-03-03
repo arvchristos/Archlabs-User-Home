@@ -2,14 +2,19 @@
 
 # key bindings
 sxhkd &
+
 # wallpaper
 nitrogen --restore &
+
 # set super key to launch rofi
 ksuperkey -e 'Super_L=Alt_L|F1' &
+
 # launch compton
 al-compositor --start &
+
 # gnome polkit
 lxpolkit &
+
 # panel
 sleep 1; al-polybar-session &
 
