@@ -1,28 +1,23 @@
 #!/usr/bin/env bash
 
 
-REPOS='
-[archlabs_repo]
-Server = https://archlabs.github.io/archlabs_repo/$arch
-Server = https://downloads.sourceforge.net/project/archlabs-repo/archlabs_repo/$arch'
+HOME_FILES=(
+"$HOME/bin"      "$HOME/.config"     "$HOME/.themes"
+"$HOME/.gorice"  "$HOME/.Xresources" "$HOME/.Xresources.template"
+"$HOME/.mozilla" "$HOME/.zshrc"      "$HOME/.bashrc"
+"$HOME/.local"   "$HOME/.xprofile"   "$HOME/.xinitrc"
+"$HOME/.icons"   "$HOME/.gtkrc-2.0"
+)
+SKEL_FILES=(
+/etc/skel/bin         /etc/skel/.config   /etc/skel/.themes
+/etc/skel/.Xresources /etc/skel/.gorice   /etc/skel/.icons
+/etc/skel/.gtkrc-2.0  /etc/skel/.xprofile /etc/skel/.xinitrc
+/etc/skel/.mozilla    /etc/skel/.Xresources.template
+)
 
-HOME_FILES=("$HOME/bin"      "$HOME/.config"     "$HOME/.themes"
-            "$HOME/.gorice"  "$HOME/.Xresources" "$HOME/.Xresources.template"
-            "$HOME/.mozilla" "$HOME/.zshrc"      "$HOME/.bashrc"
-            "$HOME/.local"   "$HOME/.xprofile"   "$HOME/.xinitrc"
-            "$HOME/.icons"   "$HOME/.gtkrc-2.0"
-            )
-
-SKEL_FILES=(/etc/skel/bin         /etc/skel/.config   /etc/skel/.themes
-            /etc/skel/.Xresources /etc/skel/.gorice   /etc/skel/.icons
-            /etc/skel/.gtkrc-2.0  /etc/skel/.xprofile /etc/skel/.xinitrc
-            /etc/skel/.mozilla    /etc/skel/.Xresources.template
-            )
-
-# Loop until network connected
 while ! [[ $(ping -c1 8.8.8.8) ]]; do
     echo -e "Please Connect to a Network Before Continuing"
-    clear; sleep 1
+    clear ; sleep 1
 done
 
 
@@ -30,14 +25,13 @@ backup_configs() {
     if ! [[ -e "$HOME/Downloads/$USER-backup.tar.gz" ]]; then
         tar czvf "$HOME/Downloads/$USER-backup.tar.gz" "${HOME_FILES[@]}" >/dev/null 2>&1
     else
-        echo "[WARNING]  Backup already exists... Not overwriting"
+        echo "[INFO]  Backup already exists... Not overwriting"
         sleep 2
     fi
 }
 
 setup_configs() {
     sudo pacman -S clutter-gtk libgee archlabs-jgmenu --needed --noconfirm
-    sudo pacman -S gdk-pixbuf2 pango python-yaml --needed --noconfirm
     for f in "${SKEL_FILES[@]}"; do
         cp -rf "$f" ~/
     done
@@ -46,9 +40,9 @@ setup_configs() {
 
 new_configs() {
     clear
-    printf "\nThis step will get the latest configs for polybar, openbox, i3 etc.
-    \n\nYour existing configs will be archived to:
-    \n\t$HOME/Downloads/$USER-backup.tar.gz\n\n\n\nDo you want to continue?  [y/N]:"
+    echo -e "\nThis step will get the latest configs for polybar, openbox, i3 etc.
+    \n\nYour existing configs will be archived to:\n\n\t$HOME/Downloads/$USER-backup.tar.gz\n\n\n"
+    printf "Do you want to continue? [y/N]: "
     read -r answer
 
     case "$answer" in
@@ -57,13 +51,17 @@ new_configs() {
             if [[ -e $HOME/Downloads/$USER-backup.tar.gz ]]; then
                 setup_configs
             fi
-            rm -f "$HOME/.config/keypack"
-            sed -i '/keypack/d' "$HOME/.config/openbox/autostart"
-            ~/.config/setup
+            if [[ -e $HOME/.config/keypack ]]; then
+                rm -f "$HOME/.config/keypack"
+                sed -i '/keypack/d' "$HOME/.config/openbox/autostart"
+            fi
+            if [[ -x $HOME/.config/setup ]]; then
+                "$HOME/.config/setup"
+            fi
     esac
 }
 
-if ! pacman -Q archlabs-user-skel >/dev/null 2>&1; then
+if ! pacman -Qsq archlabs-user-skel &>/dev/null; then
     for f in "${SKEL_FILES[@]}"; do
         sudo rm -rf "$f"
     done
@@ -71,7 +69,6 @@ if ! pacman -Q archlabs-user-skel >/dev/null 2>&1; then
 else
     sudo pacman -Syyu --noconfirm
 fi
-
 new_configs
 
 clear
